@@ -5,7 +5,7 @@ import java.util.Date;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document (collation = "products")
+@Document (collection = "products")
 public class Product {
 
     @Id 
@@ -23,10 +23,9 @@ public class Product {
 
     }
 
-    public Product(String name, Double price, Date createAt) {
+    public Product(String name, Double price) {
         this.name = name;
         this.price = price;
-        this.createAt = createAt;
     }
 
     /**
