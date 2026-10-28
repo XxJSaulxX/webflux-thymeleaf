@@ -6,9 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.jsaul.webflux_thymeleaf.models.dao.ProductDao;
 import com.jsaul.webflux_thymeleaf.models.documents.Product;
+import com.jsaul.webflux_thymeleaf.models.services.IProductService;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -17,17 +16,17 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/api/products")
 public class ProductRestController {
 
-    private final ProductDao productDao;
+    private final IProductService productService;
     private static final Logger log = LoggerFactory.getLogger(ProductRestController.class);
 
-    public ProductRestController(ProductDao productDao) {
-        this.productDao = productDao;
+    public ProductRestController(IProductService productService) {
+        this.productService = productService;
     }
 
     @GetMapping()
     public Flux<Product> index() {
 
-        Flux<Product> products = productDao.findAll()
+        Flux<Product> products = productService.findAll()
             .map(product -> {
                 product.setName(product.getName().toUpperCase());
                 return product;
@@ -41,7 +40,7 @@ public class ProductRestController {
 
         //Mono<Product> product = productDao.findById(productId);
 
-        Flux<Product> products = productDao.findAll();
+        Flux<Product> products = productService.findAll();
 
         Mono<Product> product = products.filter(p -> p.getId().equals(productId))
             .next() // convierte un Flux a on Mono
